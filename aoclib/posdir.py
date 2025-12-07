@@ -80,6 +80,8 @@ SOUTH = CardinalDirection.SOUTH
 EAST = CardinalDirection.EAST
 WEST = CardinalDirection.WEST
 
+CARDINAL_AND_DIAGONAL_DIRECTIONS = [direction for cardinal_direction in CardinalDirection for direction in (cardinal_direction, cardinal_direction + cardinal_direction.right())]
+
 class Position(tuple):
 	def __new__(cls, y, x):
 		self = tuple.__new__(cls, (y, x))
