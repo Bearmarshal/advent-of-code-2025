@@ -133,6 +133,9 @@ class TileMap[T]:
 
 		def __str__(self: Self):
 			return f"{self.position}=[{self.get()}]"
+		
+		def __repr__(self: Self):
+			return f"MapTile{self.__str__()}"
 
 		def get(self: Self):
 			return self.map[self.position]
