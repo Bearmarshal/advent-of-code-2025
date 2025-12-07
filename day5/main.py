@@ -7,11 +7,7 @@ import re
 import sys
 
 def part1(filename):
-	with io.open(filename, mode = 'r') as file:
-		fresh_ranges_str, ingredients_str = file.read().strip().split("\n\n")
-	fresh_ranges = [range(int(lower), int(upper) + 1) for lower, upper in re.findall(r"(\d+)-(\d+)", fresh_ranges_str)]
-	num_fresh = len(list(filter(lambda ingredient: any(ingredient in fresh_range for fresh_range in fresh_ranges), map(int, re.findall(r"(\d+)", ingredients_str)))))
-	print("Part 1: {}".format(num_fresh))
+	print("Part 1: {}".format((lambda fresh_ranges_str, ingredients_str: len(list(filter(lambda ingredient: any(ingredient in fresh_range for fresh_range in [range(int(lower), int(upper) + 1) for lower, upper in re.findall(r"(\d+)-(\d+)", fresh_ranges_str)]), map(int, re.findall(r"(\d+)", ingredients_str))))))(*io.open(filename, mode = 'r').read().strip().split("\n\n"))))
 
 def part2(filename):
 	with io.open(filename, mode = 'r') as file:
