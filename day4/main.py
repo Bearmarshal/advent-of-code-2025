@@ -1,3 +1,4 @@
+import collections
 import functools
 import io
 import itertools
@@ -24,19 +25,16 @@ def part1(filename):
 def part2(filename):
 	with io.open(filename, mode = 'r') as file:
 		storage_area = TileMap([line.strip() for line in file.readlines() if line])
-	open_set = set(storage_area.find_tiles("@"))
+	open_set = collections.deque(storage_area.find_tiles("@"))
 	removed_rolls = set()
 	while open_set:
 		tile = open_set.pop()
-		if not "@" in tile:
+		if tile in removed_rolls:
 			continue
-		adjacent_rolls = []
-		for adjacent in tile.neighbours(CARDINAL_AND_DIAGONAL_DIRECTIONS):
-			if "@" in adjacent and adjacent not in removed_rolls:
-				adjacent_rolls.append(adjacent)
+		adjacent_rolls = [adjacent for adjacent in tile.neighbours(CARDINAL_AND_DIAGONAL_DIRECTIONS) if "@" in adjacent and adjacent not in removed_rolls]
 		if len(adjacent_rolls) < 4:
 			removed_rolls.add(tile)
-			open_set.update(adjacent_rolls)
+			open_set.extend(adjacent_rolls)
 	print("Part 2: {}".format(len(removed_rolls)))
 
 if __name__ == "__main__":
