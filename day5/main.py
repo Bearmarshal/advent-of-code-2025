@@ -10,19 +10,7 @@ def part1(filename):
 	print("Part 1: {}".format((lambda fresh_ranges_str, ingredients_str: len(list(filter(lambda ingredient: any(ingredient in fresh_range for fresh_range in [range(int(lower), int(upper) + 1) for lower, upper in re.findall(r"(\d+)-(\d+)", fresh_ranges_str)]), map(int, re.findall(r"(\d+)", ingredients_str))))))(*io.open(filename, mode = 'r').read().strip().split("\n\n"))))
 
 def part2(filename):
-	with io.open(filename, mode = 'r') as file:
-		fresh_ranges_str, ingredients_str = file.read().strip().split("\n\n")
-	fresh_ranges = list(sorted((range(int(lower), int(upper) + 1) for lower, upper in re.findall(r"(\d+)-(\d+)", fresh_ranges_str)), key=lambda fresh_range: fresh_range.start))
-	merged_ranges = [fresh_ranges.pop(0)]
-	for fresh_range in fresh_ranges:
-		last_merged = merged_ranges[-1]
-		if fresh_range.start <= last_merged.stop:
-			if fresh_range.stop > last_merged.stop:
-				merged_ranges[-1] = range(last_merged.start, fresh_range.stop)
-		else:
-			merged_ranges.append(fresh_range)
-	num_fresh = sum(map(len, merged_ranges))
-	print("Part 2: {}".format(num_fresh))
+	print("Part 2: {}".format(sum(map(len, itertools.accumulate(list(sorted((range(int(lower), int(upper) + 1) for lower, upper in re.findall(r"(\d+)-(\d+)", io.open(filename, mode = 'r').read())), key=lambda fresh_range: fresh_range.start)), lambda prev_range, curr_range: range(max(curr_range.start, prev_range.stop), max(curr_range.stop, prev_range.stop)))))))
 
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
